@@ -13,6 +13,7 @@ DEEPSEEK_API_KEY = "sk-3524a0ee04674115a8fc0df40475d61d"  # TODO: 换成你自�
 DEEPSEEK_API_URL = "https://api.deepseek.com/v1/chat/completions"
 DEEPSEEK_MODEL = "deepseek-chat"
 
+
 def generate_report(topic: str, chat_text: str, extra: str) -> str:
     user_prompt = f"""
 你是一名“亲密关系情感分析师”，你的任务是根据下面这段对话记录，
@@ -60,6 +61,7 @@ SMTP_PORT = 465
 SMTP_USER = "francis_l01@163.com"
 SMTP_PASS = "MBpJMGsPfnPRYXZE"
 
+
 def send_email(to_email: str, report: str):
     msg = MIMEText(report, "plain", "utf-8")
     msg["From"] = Header("大女主显化", "utf-8")
@@ -102,9 +104,11 @@ def index():
     session.clear()
     return render_template("index.html")
 
+
 @app.route("/intro")
 def intro():
     return render_template("intro.html")
+
 
 @app.route("/topic", methods=["GET", "POST"])
 def topic():
@@ -113,10 +117,14 @@ def topic():
         if not chosen:
             return render_template("topic.html", error="请选择一个主题。")
         session["topic"] = chosen
-        session["history"] = [{"role": "ai", "text": WELCOME_TEXT}, {"role": "ai", "text": QUESTIONS[0]}]
+        session["history"] = [
+            {"role": "ai", "text": WELCOME_TEXT},
+            {"role": "ai", "text": QUESTIONS[0]},
+        ]
         session["step"] = 0
         return redirect(url_for("chat"))
     return render_template("topic.html")
+
 
 @app.route("/chat", methods=["GET", "POST"])
 def chat():
@@ -125,6 +133,7 @@ def chat():
     history = session.get("history", [])
     step = session.get("step", 0)
     finished = step >= len(QUESTIONS)
+
     if request.method == "POST":
         if finished:
             # 🚀 聊完直接跳到解锁页
@@ -138,6 +147,7 @@ def chat():
             session["history"] = history
             session["step"] = step
         finished = step >= len(QUESTIONS)
+
     return render_template("chat.html", history=history, finished=finished)
 
 
@@ -146,50 +156,91 @@ def unlock():
     if "topic" not in session or "history" not in session:
         return redirect(url_for("index"))
     extra_val = session.get("extra", "")
+
     if request.method == "POST":
         extra = request.form.get("extra", "").strip()
         method = request.form.get("unlock_method", "").strip()
         code = request.form.get("invite_code", "").strip()
         session["extra"] = extra
+
         if not method:
-            return render_template("unlock.html", extra=extra, error="请选择解锁方式。", REPORT_PRICE=REPORT_PRICE)
+            return render_template(
+                "unlock.html",
+                extra=extra,
+                error="请选择解锁方式。",
+                REPORT_PRICE=REPORT_PRICE,
+            )
+
         if method == "paid":
             session["unlocked"] = True
             return redirect(url_for("report"))
+
         if method == "code":
             if not code:
-                return render_template("unlock.html", extra=extra, error="请输入邀请码。", REPORT_PRICE=REPORT_PRICE)
+                return render_template(
+                    "unlock.html",
+                    extra=extra,
+                    error="请输入邀请码。",
+                    REPORT_PRICE=REPORT_PRICE,
+                )
             if code not in VALID_CODES:
-                return render_template("unlock.html", extra=extra, error="邀请码错误。", REPORT_PRICE=REPORT_PRICE)
+                return render_template(
+                    "unlock.html",
+                    extra=extra,
+                    error="邀请码错误。",
+                    REPORT_PRICE=REPORT_PRICE,
+                )
             session["unlocked"] = True
             return redirect(url_for("report"))
-    return render_template("unlock.html", extra=extra_val, error=None, REPORT_PRICE=REPORT_PRICE)
+
+    return render_template(
+        "unlock.html", extra=extra_val, error=None, REPORT_PRICE=REPORT_PRICE
+    )
 
 
 @app.route("/report", methods=["GET", "POST"])
 def report():
+    # 基本校验
     if "topic" not in session or "history" not in session:
         return redirect(url_for("index"))
     if not session.get("unlocked"):
         return redirect(url_for("unlock"))
+
     topic = session["topic"]
     extra = session.get("extra", "")
-    chat_text = "\n".join([("AI" if m["role"] == "ai" else "你") + "：" + m["text"] for m in session["history"]])
+    chat_text = "\n".join(
+        [("AI" if m["role"] == "ai" else "你") + "：" + m["text"] for m in session["history"]]
+    )
+
     if request.method == "POST":
         email = request.form.get("email", "").strip()
         if not email:
             return render_template("report.html", topic=topic, error="请输入邮箱。")
+
         try:
+            # 生成报告 + 发邮件
             report_text = generate_report(topic, chat_text, extra)
             send_email(email, report_text)
         except Exception as e:
-            print("Error:", e)
-            return render_template("report.html", topic=topic, error="报告生成或发送失败，请稍后再试。")
+            # 把详细报错打到日志里，方便在 Render → Logs 里查看
+            import sys, traceback
+            print("Error in /report route:", e, file=sys.stderr)
+            traceback.print_exc()
+
+            return render_template(
+                "report.html",
+                topic=topic,
+                error="报告生成或发送失败，请稍后再试。",
+            )
+
+        # 正常完成
         return render_template("success.html", email=email)
+
+    # GET：展示填邮箱页面
     return render_template("report.html", topic=topic, error=None)
+
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))  # 部署时用环境变量端口，本地默认 5000
     print(f"✅ 启动成功：流程 = 聊完 → 解锁 → 填邮箱 → 成功（端口：{port}）")
     app.run(host="0.0.0.0", port=port)
-
