@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>填写邮箱 · 大女主显化</title>
+  <style>
+    body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+           background:linear-gradient(135deg,#ff9ac9,#ffc0d9); padding:40px 0; }
+    .wrap { max-width:800px; margin:0 auto; }
+    .card { background:#fff; border-radius:24px; padding:28px 34px; box-shadow:0 18px 40px rgba(0,0,0,0.08); }
+    h1 { margin-top:0; color:#e21c72; font-size:24px; }
+    p { color:#444; line-height:1.7; }
+    input[type="email"] {
+      width:100%; border-radius:999px; border:1px solid #ffd1ea;
+      padding:10px 14px; margin-top:6px; box-sizing:border-box;
+    }
+    .btn-row { margin-top:24px; text-align:center; }
+    .btn {
+      padding:12px 30px;
+      border-radius:999px;
+      border:none;
+      background:linear-gradient(90deg,#ff4fa8,#ff7bd1);
+      color:#fff; font-weight:600; cursor:pointer;
+    }
+    .error { color:#e53935; margin-top:10px; font-size:14px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <h1>填写你的邮箱</h1>
+      <p>解锁已完成 🎀 现在，请留下你常用的邮箱，我会把刚才那份为你定制的情感分析报告悄悄发给你。</p>
+
+      <form method="post">
+        <p>接收报告的邮箱（必填）：</p>
+        <input type="email" name="email" placeholder="例如：you@example.com">
+
+        {% if error %}
+          <div class="error">{{ error }}</div>
+        {% endif %}
+
+        <div class="btn-row">
+          <button type="submit" class="btn">生成报告并发送到邮箱 💌</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</body>
+</html>

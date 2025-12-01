@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>选一个此刻的主题 · 大女主显化</title>
+  <style>
+    body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+           background:linear-gradient(135deg,#ff9ac9,#ffc0d9); padding:40px 0; }
+    .wrap { max-width:900px; margin:0 auto; }
+    .card { background:#fff; border-radius:24px; padding:28px 34px; box-shadow:0 18px 40px rgba(0,0,0,0.08); }
+    h1 { margin-top:0; color:#e21c72; font-size:24px; }
+    p { color:#444; line-height:1.7; }
+    .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:16px; margin-top:16px; }
+    .topic-card {
+      border-radius:18px; padding:14px 16px;
+      background:#fff7fb; border:1px solid transparent;
+      cursor:pointer; transition:all .2s;
+      font-size:14px; color:#555;
+    }
+    .topic-card:hover { border-color:#ff7bd1; box-shadow:0 10px 24px rgba(0,0,0,0.05); }
+    input[type="radio"] { margin-right:6px; }
+    .btn-row { margin-top:24px; text-align:center; }
+    .btn {
+      padding:12px 30px;
+      border-radius:999px;
+      border:none;
+      background:linear-gradient(90deg,#ff4fa8,#ff7bd1);
+      color:#fff; font-weight:600; cursor:pointer;
+    }
+    .error { color:#e53935; margin-top:10px; font-size:14px; text-align:center; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <h1>此刻，哪一个主题最靠近你的心？</h1>
+      <p>先不用想太多，选一个此刻最有感觉的方向，我们后面可以慢慢展开。</p>
+
+      <form method="post">
+        <div class="grid">
+          <label class="topic-card">
+            <input type="radio" name="topic" value="从未体会过高潮">
+            从未体会过高潮
+          </label>
+          <label class="topic-card">
+            <input type="radio" name="topic" value="和伴侣不和谐">
+            和伴侣不和谐
+          </label>
+          <label class="topic-card">
+             <input type="radio" name="topic" value="性冷淡">
+            性冷淡
+          </label>
+          <label class="topic-card">
+            <input type="radio" name="topic" value="性羞耻、恐惧">
+            性羞耻、恐惧
+          </label>
+          <label class="topic-card">
+            <input type="radio" name="topic" value="性别认同疑问">
+            性别认同疑问
+          </label>
+          <label class="topic-card">
+             <input type="radio" name="topic" value="性取向相关困惑">
+            性取向相关困惑
+          </label>
+        </div>
+
+        {% if error %}
+          <div class="error">{{ error }}</div>
+        {% endif %}
+
+        <div class="btn-row">
+          <button type="submit" class="btn">好，就从这里开始</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>解锁报告 · 大女主显化</title>
+  <style>
+    body {
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+      background:linear-gradient(135deg,#ff9ac9,#ffc0d9);
+      padding:40px 0;
+    }
+    .wrap { max-width:800px; margin:0 auto; }
+    .card {
+      background:#fff;
+      border-radius:24px;
+      padding:28px 34px;
+      box-shadow:0 18px 40px rgba(0,0,0,0.08);
+    }
+    h1 { margin-top:0; color:#e21c72; font-size:24px; }
+    p { color:#444; line-height:1.7; }
+    textarea {
+      width:100%;
+      min-height:100px;
+      border-radius:12px;
+      border:1px solid #ffd1ea;
+      padding:8px 10px;
+      font-family:inherit;
+      resize:vertical;
+      margin-top:6px;
+      box-sizing:border-box;
+    }
+    input[type="text"] {
+      width:100%;
+      border-radius:999px;
+      border:1px solid #ffd1ea;
+      padding:10px 14px;
+      margin-top:6px;
+      box-sizing:border-box;
+    }
+    .form-group { margin-top:18px; }
+    .radio-group label {
+      display:block;
+      margin-top:6px;
+      cursor:pointer;
+      font-size:14px;
+      color:#555;
+    }
+    .btn-row { margin-top:24px; text-align:center; }
+    .btn {
+      padding:12px 30px;
+      border-radius:999px;
+      border:none;
+      background:linear-gradient(90deg,#ff4fa8,#ff7bd1);
+      color:#fff;
+      font-weight:600;
+      cursor:pointer;
+    }
+    .error { color:#e53935; margin-top:10px; font-size:14px; }
+    .hint { font-size:13px; color:#777; margin-top:6px; }
+    .pay-btn {
+      margin-top:10px;
+      padding:8px 16px;
+      border-radius:999px;
+      border:none;
+      background:#ffe5f3;
+      color:#d81b60;
+      cursor:pointer;
+      font-size:13px;
+      display:none; /* 默认隐藏，勾选“去付款”才显示 */
+    }
+    #invite-group {
+      display:none; /* 默认隐藏，勾选“我有邀请码”才显示 */
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <h1>解锁你的大女主显化报告</h1>
+      <p>我们已经完成了身心对话。接下来，请先完成解锁，再进入下一步填写邮箱并接收报告。</p>
+
+      <form method="post">
+        <!-- 1. 补充内容 -->
+        <p>如果你还想补充一两句，也可以写在这里；如果不想，可以留空。</p>
+        <textarea name="extra" placeholder="你想对自己、对我、对宇宙再多说一点什么吗？">{{ extra or '' }}</textarea>
+
+        <!-- 2. 解锁方式 -->
+        <div class="form-group">
+          <p style="color:#e21c72; font-weight:600;">
+            请选择解锁方式：支付 {{ REPORT_PRICE if REPORT_PRICE is defined else 59 }} 元或使用邀请码。
+          </p>
+          <div class="radio-group">
+            <label>
+              <input type="radio" name="unlock_method" value="paid" id="radio-paid">
+              去付款
+            </label>
+
+            <!-- 付款按钮：只有勾选“去付款”后才显示 -->
+            <button type="button" class="pay-btn" id="pay-btn">
+              去付款 / 跳转支付宝
+            </button>
+
+            <label style="margin-top:12px;">
+              <input type="radio" name="unlock_method" value="code" id="radio-code">
+              我有邀请码
+            </label>
+          </div>
+        </div>
+
+        <!-- 3. 邀请码输入：只在“我有邀请码”被勾选时展示 -->
+        <div class="form-group" id="invite-group">
+          <label for="invite_code">邀请码：</label>
+          <input type="text" name="invite_code" id="invite_code">
+          <div class="hint">
+            提示：邀请码由主理人发放；没有邀请码时，可先完成 {{ REPORT_PRICE if REPORT_PRICE is defined else 59 }} 元支付。
+          </div>
+        </div>
+
+        {% if error %}
+          <div class="error">{{ error }}</div>
+        {% endif %}
+
+        <div class="btn-row">
+          <button type="submit" class="btn">已完成解锁，进入下一步填写邮箱 💌</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // 简单的前端交互控制
+    const radioPaid = document.getElementById('radio-paid');
+    const radioCode = document.getElementById('radio-code');
+    const payBtn = document.getElementById('pay-btn');
+    const inviteGroup = document.getElementById('invite-group');
+
+    function updateUI() {
+      if (radioPaid.checked) {
+        payBtn.style.display = 'inline-block';
+      } else {
+        payBtn.style.display = 'none';
+      }
+
+      if (radioCode.checked) {
+        inviteGroup.style.display = 'block';
+      } else {
+        inviteGroup.style.display = 'none';
+      }
+    }
+
+    radioPaid.addEventListener('change', updateUI);
+    radioCode.addEventListener('change', updateUI);
+
+    // 支付按钮点击：跳转到支付宝开放平台（这里你可以换成自己的收款链接）
+    payBtn.addEventListener('click', function () {
+      // TODO: 把下面这个地址换成你在支付宝开放平台申请到的收款链接
+      window.open('https://www.alipay.com', '_blank');
+    });
+
+    // 初始状态刷新一次
+    updateUI();
+  </script>
+</body>
+</html>

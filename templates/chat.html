@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>身心对话 · 大女主显化</title>
+  <style>
+    body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+           background:linear-gradient(135deg,#ff9ac9,#ffc0d9); padding:40px 0; }
+    .wrap { max-width:900px; margin:0 auto; }
+    .card { background:#fff; border-radius:24px; padding:24px 30px; box-shadow:0 18px 40px rgba(0,0,0,0.08);
+            display:flex; flex-direction:column; height:80vh; }
+    h1 { margin-top:0; color:#e21c72; font-size:24px; }
+    .chat-box { flex:1; overflow-y:auto; padding-right:4px; margin-bottom:16px; }
+    .bubble-row { display:flex; margin-bottom:12px; }
+    .bubble-ai { max-width:70%; background:#ffe4f2; border-radius:18px 18px 18px 4px; padding:10px 14px; color:#333; }
+    .bubble-user { margin-left:auto; max-width:70%; background:#e4f3ff; border-radius:18px 18px 4px 18px; padding:10px 14px; color:#333; }
+    .bubble-ai p, .bubble-user p { margin:0; white-space:pre-wrap; line-height:1.6; }
+    form { margin-top:4px; }
+    textarea { width:100%; min-height:70px; border-radius:12px; border:1px solid #ffd1ea; padding:8px 10px;
+               font-family:inherit; resize:vertical; }
+    .btn-row { margin-top:8px; display:flex; justify-content:flex-end; gap:12px; }
+    .btn { padding:10px 24px; border-radius:999px; border:none; cursor:pointer; font-weight:600; }
+    .btn-primary { background:linear-gradient(90deg,#ff4fa8,#ff7bd1); color:#fff; }
+    .btn-secondary { background:#eee; color:#444; }
+    .hint { font-size:12px; color:#888; margin-top:4px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <h1>大女主显化 · 身心对话</h1>
+
+      <div class="chat-box">
+        {% for msg in history %}
+          <div class="bubble-row">
+            {% if msg.role == 'ai' %}
+              <div class="bubble-ai"><p>{{ msg.text }}</p></div>
+            {% else %}
+              <div class="bubble-user"><p>{{ msg.text }}</p></div>
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+
+      {% if not finished %}
+        <form method="post">
+          <textarea name="message" placeholder="把你想说的慢慢写下来，这里只为你保留。"></textarea>
+          <div class="btn-row">
+            <button type="submit" class="btn btn-primary">发送给大女主宇宙 ✨</button>
+          </div>
+          <div class="hint">每次回答后，我都会根据你的内容继续问下一句，我们慢慢来。</div>
+        </form>
+      {% else %}
+        <div class="hint">我们已经完成了这一阶段的身心对话，接下来可以生成一份只属于你的情感分析报告。</div>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="{{ url_for('report') }}">进入生成报告 ➜</a>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+<script>
+  // 页面加载完成后，把聊天框滚动到最底部
+  document.addEventListener("DOMContentLoaded", function () {
+    var chatBox = document.querySelector(".chat-box");
+    if (chatBox) {
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+  });
+</script>
+</body>
+</html>

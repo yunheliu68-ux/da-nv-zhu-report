@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>大女主显化 · 首页</title>
+  <style>
+    body {
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+      background:linear-gradient(135deg,#ff9ac9,#ffc0d9);
+      height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .card {
+      background:#fff;
+      border-radius:24px;
+      padding:32px 40px;
+      box-shadow:0 18px 40px rgba(0,0,0,0.08);
+      max-width:520px;
+      text-align:center;
+    }
+
+    /* Love成长学院：和下面主标题同字号，更显眼 */
+    .brand {
+      font-size:26px;       /* 和 h1 一样大 */
+      font-weight:700;      /* 加粗 */
+      color:#e21c72;        /* 同色系粉色 */
+      margin-bottom:6px;
+    }
+
+    h1 {
+      margin-top:0;
+      color:#333;           /* 稍微收一点颜色，让品牌更突出 */
+      font-size:26px;       /* 和 brand 一样大 */
+    }
+
+    p {
+      color:#555;
+      line-height:1.7;
+    }
+
+    .btn {
+      display:inline-block;
+      margin-top:20px;
+      padding:12px 30px;
+      border-radius:999px;
+      border:none;
+      background:linear-gradient(90deg,#ff4fa8,#ff7bd1);
+      color:#fff;
+      font-weight:600;
+      cursor:pointer;
+      text-decoration:none;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <!-- 新增：Love成长学院 大标题 -->
+    <div class="brand">Love成长学院</div>
+
+    <!-- 原来的主标题，作为专题名 -->
+    <h1>大女主显化 · 身心对话</h1>
+
+    <p>
+      这一刻，请把注意力轻轻带回到自己身上。<br>
+      接下来，我们会通过几轮温柔的提问，一起看见你和亲密、和身体、和欲望的真实关系。
+    </p>
+    <a href="{{ url_for('intro') }}" class="btn">开始 · 和自己好好聊一聊</a>
+  </div>
+</body>
+</html>
