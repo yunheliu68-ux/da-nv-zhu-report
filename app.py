@@ -50,7 +50,7 @@ def generate_report(topic: str, chat_text: str, extra: str) -> str:
         ],
         "stream": False,
     }
-    resp = requests.post(DEEPSEEK_API_URL, headers=headers, json=data, timeout=60)
+    resp = requests.post(DEEPSEEK_API_URL, headers=headers, json=data, timeout=300)
     result = resp.json()
     return result["choices"][0]["message"]["content"]
 
@@ -244,3 +244,4 @@ if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))  # 部署时用环境变量端口，本地默认 5000
     print(f"✅ 启动成功：流程 = 聊完 → 解锁 → 填邮箱 → 成功（端口：{port}）")
     app.run(host="0.0.0.0", port=port)
+
